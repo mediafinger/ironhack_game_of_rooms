@@ -1,8 +1,16 @@
 class Room
   attr_reader :description
-  attr_accessor :north, :west, :south, :east
 
   def initialize(description)
     @description = description
+    @exits = {}
+  end
+
+  def add_exit(direction, room)
+    @exits[direction] = room
+  end
+
+  def exit_to(direction)
+    @exits[direction]
   end
 end

@@ -1,6 +1,13 @@
 require_relative "./room.rb"
 
 class Game
+  DIRECTIONS = {
+    "N" => :north,
+    "E" => :east,
+    "S" => :south,
+    "W" => :west,
+  }
+
   def initialize
     setup
 
@@ -18,17 +25,18 @@ class Game
   end
 
   def input
-    dir = gets.chomp.upcase[0]
+    direction = gets.chomp.upcase[0]
+    dir = DIRECTIONS[direction] || direction
 
     case dir
-    when "N"
-      @current_room.north ? move(:north) : error(:north)
-    when "E"
-      @current_room.east ? move(:east) : error(:east)
-    when "S"
-      @current_room.south ? move(:south) : error(:south)
-    when "W"
-      @current_room.west ? move(:west) : error(:west)
+    when :north
+      @current_room.exit_to(dir) ? move(dir) : error(dir)
+    when :east
+      @current_room.exit_to(dir) ? move(dir) : error(dir)
+    when :south
+      @current_room.exit_to(dir) ? move(dir) : error(dir)
+    when :west
+      @current_room.exit_to(dir) ? move(dir) : error(dir)
     when "Q"
       exit
     else
@@ -38,12 +46,13 @@ class Game
   end
 
   def move(direction)
-    @current_room = @current_room.public_send(direction)
+    puts "You go #{direction}."
+    @current_room = @current_room.exit_to(direction)
     prompt
   end
 
   def error(direction)
-    puts "You can not go to the #{direction.to_s}."
+    puts "You can not go #{direction.to_s}."
     prompt
   end
 
@@ -63,16 +72,16 @@ class Game
   end
 
   def create_connections
-    @dark_room.north = @crossing
-    @crossing.south = @dark_room
+    @dark_room.add_exit(:north, @crossing)
+    @crossing.add_exit(:south, @dark_room)
 
-    @lake_room.south = @crossing
-    @crossing.north = @lake_room
+    @lake_room.add_exit(:south, @crossing)
+    @crossing.add_exit(:north, @lake_room)
 
-    @lake_room.west = @bear_room
-    @bear_room.east = @lake_room
+    @lake_room.add_exit(:west, @bear_room)
+    @bear_room.add_exit(:east, @lake_room)
 
-    @chest_room.east = @crossing
-    @crossing.west = @chest_room
+    @chest_room.add_exit(:east, @crossing)
+    @crossing.add_exit(:west, @chest_room)
   end
 end
