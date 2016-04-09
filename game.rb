@@ -1,5 +1,6 @@
 require_relative "./hunger.rb"
 require_relative "./room.rb"
+require_relative "./player.rb"
 
 class Game
   include Hunger
@@ -12,6 +13,7 @@ class Game
   }
 
   def initialize
+    @player = Player.new
     setup
 
     start
@@ -55,7 +57,8 @@ class Game
     when "L"
       look_for_food # defined in module Hunger
     when "Q"
-      puts "Goodbye!"
+      puts "☠  You achieved exactly #{@player.killpoints} killpoints! ☠"
+      puts " * * * Goodbye! * * * "
       exit
     else
       puts "I don't understand. If you want to leave press 'Q'"
