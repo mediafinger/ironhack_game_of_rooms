@@ -47,25 +47,23 @@ class Game
       @current_room.exit_to(dir) ? move(dir) : error(dir)
     when "L"
       look_for_food # defined in module Hunger
-      prompt
     when "Q"
       puts "Goodbye!"
       exit
     else
       puts "I don't understand. If you want to leave press 'Q'"
-      prompt
     end
+
+    prompt
   end
 
   def move(direction)
     puts "You go #{direction}."
     @current_room = @current_room.exit_to(direction)
-    prompt
   end
 
   def error(direction)
     puts "You can not go #{direction.to_s}."
-    prompt
   end
 
   private
