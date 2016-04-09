@@ -14,9 +14,16 @@ class Game
   def initialize
     setup
 
-    @current_room = @dark_room
+    start
+  end
+
+  private
+
+  def start(current_room = @dark_room)
+    @current_room = current_room
 
     puts "Let the games begin..."
+    puts " -  " * 10
     prompt
   end
 
@@ -65,8 +72,6 @@ class Game
   def error(direction)
     puts "You can not go #{direction.to_s}."
   end
-
-  private
 
   def setup
     create_rooms
