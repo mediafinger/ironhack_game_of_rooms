@@ -29,13 +29,8 @@ class Game
     dir = DIRECTIONS[direction] || direction
 
     case dir
-    when :north
-      @current_room.exit_to(dir) ? move(dir) : error(dir)
-    when :east
-      @current_room.exit_to(dir) ? move(dir) : error(dir)
-    when :south
-      @current_room.exit_to(dir) ? move(dir) : error(dir)
-    when :west
+    # when a, b, c behaves like if a || b || c
+    when :north, :east, :south, :west
       @current_room.exit_to(dir) ? move(dir) : error(dir)
     when "Q"
       exit
