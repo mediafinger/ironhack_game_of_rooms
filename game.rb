@@ -1,6 +1,9 @@
+require_relative "./hunger.rb"
 require_relative "./room.rb"
 
 class Game
+  include Hunger
+
   DIRECTIONS = {
     "N" => :north,
     "E" => :east,
@@ -32,7 +35,11 @@ class Game
     # when a, b, c behaves like if a || b || c
     when :north, :east, :south, :west
       @current_room.exit_to(dir) ? move(dir) : error(dir)
+    when "L"
+      look_for_food # defined in module Hunger
+      prompt
     when "Q"
+      puts "Goodbye!"
       exit
     else
       puts "I don't understand. If you want to leave press 'Q'"
