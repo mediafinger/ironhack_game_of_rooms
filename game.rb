@@ -22,9 +22,19 @@ class Game
 
   def prompt
     puts @current_room.description
+    print_exits
+
     print "> "
 
     input
+  end
+
+  def print_exits
+    exits = @current_room.exits.map do |direction, _room|
+      direction.to_s.capitalize
+    end
+
+    puts "Exits: #{exits.join(', ')}"
   end
 
   def input
@@ -66,7 +76,7 @@ class Game
   end
 
   def create_rooms
-    @dark_room = Room.new("You are in a dark room. There is a door to the north.")
+    @dark_room = Room.new("You are in a dark room.")
     @bear_room = Room.new("You are in the forest. There is a lot of light. There is a bear sleeping.")
     @lake_room = Room.new("You are at a lake.")
     @chest_room = Room.new("You are in a small room. In front of you is a chest")

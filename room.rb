@@ -13,4 +13,8 @@ class Room
   def exit_to(direction)
     @exits[direction]
   end
+
+  def exits
+    @exits.keys
+  end
 end
