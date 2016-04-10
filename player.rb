@@ -11,7 +11,7 @@ class Player
   # the player
   def serialize
     {
-      inventory: @inventory,
+      inventory: @inventory.to_a,
       killpoints: @killpoints
     }
   end

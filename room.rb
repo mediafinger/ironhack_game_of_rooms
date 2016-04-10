@@ -22,7 +22,7 @@ class Room
       identifier: @identifier,
       description: @description,
       exits: serialized_exits,
-      locked_doors: @locked_doors,
+      locked_doors: @locked_doors.to_a,
       action: @action ? @action.serialize : nil,
     }
   end

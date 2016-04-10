@@ -1,3 +1,4 @@
+require 'json'
 require_relative "./action.rb"
 require_relative "./hunger.rb"
 require_relative "./map.rb"
@@ -97,6 +98,8 @@ class Game
       @current_room.trigger_action
     when "INVENTORY", "MY STUFF"
       puts "You carry: #{@player.inventory.to_a.join(', ')}"
+    when "SAVE", "SAVE GAME"
+      save_game
     when "Q", "QUIT"
       puts "~" * 64
       puts "☠  You achieved exactly #{@player.killpoints} killpoints! ☠"
@@ -118,5 +121,19 @@ class Game
 
   def error(direction)
     puts "You can not go #{direction.to_s}."
+  end
+
+  def save_game
+    puts "This will overwrite any existing savegame. Continue? (Yes / No)"
+    print "> "
+    choice = gets.chomp.upcase[0]
+
+    if choice == "Y"
+      File.open("./savegame.json", mode: "w") do |file|
+        file << serialize.to_json
+      end
+
+      puts "Your game has been saved. ✓"
+    end
   end
 end
