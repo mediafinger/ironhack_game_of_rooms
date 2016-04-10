@@ -4,4 +4,4 @@ Implement a classical text adventure.
 
 ## Running the game
 
-In the terminal just call `ruby main.rb`
+In the terminal just call `ruby dungeon_crawler.rb`
