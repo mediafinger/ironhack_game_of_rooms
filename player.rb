@@ -3,9 +3,16 @@ require 'set'
 class Player
   attr_reader :inventory, :killpoints
 
-  def initialize
-    @inventory = Set.new()
-    @killpoints = 0
+  def initialize(options = {})
+    @inventory = options[:inventory] || Set.new()
+    @killpoints = options[:killpoints] || 0
+  end
+
+  def self.load(options = {})
+    Player.new(
+      inventory: options[:inventory].to_set,
+      killpoints: options[:killpoints]
+    )
   end
 
   # the player

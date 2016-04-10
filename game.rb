@@ -28,15 +28,6 @@ class Game
     room_description
   end
 
-  # the player, the food, the rooms and actions
-  def serialize
-    { food: @food }.merge(@player.serialize).merge(@map.serialize)
-  end
-
-  def game_over
-    Game.game_over
-  end
-
   def self.game_over
     puts "~" * 64
     puts " G A M E  ☠   O V E R "
@@ -44,6 +35,15 @@ class Game
   end
 
   private
+
+  # the player, the food, the rooms and actions
+  def serialize
+    { current_room: @current_room.identifier, food: @food }.merge(@player.serialize).merge(@map.serialize)
+  end
+
+  def game_over
+    Game.game_over
+  end
 
   def room_description
     puts @current_room.description
@@ -88,7 +88,10 @@ class Game
 
     case command
     when "H", "HELP"
-      puts "You scream for help, but you are alone.\nType 'INSPECT ROOM' to investigate a room\nor 'QUIT' if you want to leave."
+      puts "You scream for help, but you are alone."
+      puts "Type 'INSPECT ROOM' to investigate a room"
+      puts "or type 'SAVE' to save your game and 'LOAD' to load one"
+      puts "or type 'QUIT' if you want to leave."
     when "N", "NORTH", "W", "WEST", "S", "SOUTH", "E", "EAST"
       direction = DIRECTIONS[command[0]]
       @current_room.exit_to(direction) ? move(direction) : error(direction)
@@ -100,6 +103,8 @@ class Game
       puts "You carry: #{@player.inventory.to_a.join(', ')}"
     when "SAVE", "SAVE GAME"
       save_game
+    when "LOAD", "LOAD GAME"
+      load_game
     when "Q", "QUIT"
       puts "~" * 64
       puts "☠  You achieved exactly #{@player.killpoints} killpoints! ☠"
@@ -135,5 +140,31 @@ class Game
 
       puts "Your game has been saved. ✓"
     end
+  end
+
+  def load_game
+    puts "You will lose all current progress when you load the savegame. Continue? (Yes / No)"
+    print "> "
+    choice = gets.chomp.upcase[0]
+
+    if choice == "Y"
+      file = File.read("./savegame.json") # TODO handle missing file
+      serialized_hash = JSON.parse(file)
+
+      @food = serialized_hash["food"]
+
+      @player = Player.load(
+        inventory: serialized_hash["inventory"],
+        killpoints: serialized_hash["killpoints"]
+      )
+
+      @map = Map.new(@player)
+      rooms = @map.load(serialized_hash["rooms"])
+      room = rooms.values.find { |room| room.identifier == serialized_hash["current_room"] }
+      @current_room = room
+    end
+
+    puts "Loading successful. ✓"
+    room_description
   end
 end

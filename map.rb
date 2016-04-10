@@ -21,6 +21,43 @@ class Map
     @rooms[:dark_room]  # return the first room, in which the player starts
   end
 
+  def load(saved_rooms)
+    @rooms = {}
+    saved_rooms.each do |name, data|
+      room = Room.new(data["description"], data["identifier"])
+
+      if data["action"]
+        room.add_action(
+          Action.new(@player,
+            :confirmation => data["action"]["confirmation"],
+            :failure => data["action"]["failure"],
+            :item => data["action"]["item"],
+            :remove => data["action"]["remove"],
+            :thing => data["action"]["thing"],
+            :type => data["action"]["type"],
+          )
+        )
+      end
+
+      @rooms[name.to_sym] = room
+    end
+
+    saved_rooms.each do |name, data|
+      data["exits"].each do |direction, identifier|
+        room = @rooms.values.find { |r| r.identifier == identifier }
+        @rooms[name.to_sym].add_exit(direction.to_sym, room)
+      end
+    end
+
+    saved_rooms.each do |name, data|
+      data["locked_doors"].each do |direction|
+        @rooms[name.to_sym].lock(direction.to_sym)
+      end
+    end
+
+    @rooms
+  end
+
   private
 
   def create_rooms
