@@ -16,6 +16,7 @@ class Game
 
   def initialize
     @player = Player.new
+    @food = 2  # for the Hunger module
     @current_room = Map.new(@player).setup
   end
 
@@ -84,7 +85,7 @@ class Game
     when "N", "NORTH", "W", "WEST", "S", "SOUTH", "E", "EAST"
       direction = DIRECTIONS[command[0]]
       @current_room.exit_to(direction) ? move(direction) : error(direction)
-    when "L", "LOOK FOR FOOD"
+    when "L", "F", "LOOK FOR FOOD", "FOOD", "FIND FOOD"
       look_for_food # defined in module Hunger
     when "I", "INSPECT", "INSPECT ROOM", "INVESTIGATE", "INVESTIGATE ROOM"
       @current_room.trigger_action
