@@ -1,9 +1,11 @@
+require 'set'
+
 class Room
   attr_reader :description
 
   def initialize(description)
     @description = description
-    @locked_direction = false
+    @locked_doors = Set.new()
     @exits = {}
   end
 
@@ -12,7 +14,7 @@ class Room
   end
 
   def exit_to(direction)
-    if @locked_direction == direction
+    if @locked_doors.include? direction
       puts "This door is locked."
     else
       @exits[direction]
@@ -24,16 +26,15 @@ class Room
   end
 
   def lock(direction)
-    @action.room = self
-    @locked_direction = direction
+    @locked_doors << direction
   end
 
-  def unlock!
-    @locked_direction = false
+  def unlock(direction)
+    @locked_doors.delete_if { |dir| dir == direction  }
   end
 
-  def locked?
-    @locked_direction && true
+  def locked?(direction)
+    @locked_doors.include? direction
   end
 
   def add_action(action)

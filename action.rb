@@ -1,6 +1,4 @@
 class Action
-  attr_accessor :room  # needed to unlock a door
-
   def initialize(player, options = {})
     @player = player  # to check and add to inventory, to add killpoints
 
@@ -26,8 +24,6 @@ class Action
     case @type
     when "open"
       open_thing
-    when "unlock"
-      unlock_door
     when "push"
       push_thing
     when "take"
@@ -48,18 +44,6 @@ class Action
     else
       puts @failure
       exit
-    end
-  end
-
-  # 100% chance to unlock door if player has item
-  # 0% chance to get item
-  # 0% chance to die
-  def unlock_door
-    if @player.has?(@item)
-      room.unlock!
-      puts @confirmation
-    else
-      puts @failure
     end
   end
 

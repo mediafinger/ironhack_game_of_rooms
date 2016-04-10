@@ -45,6 +45,24 @@ class Game
     end
 
     puts "Exits: #{exits.join(', ')}"
+    print_locked_exits
+  end
+
+  def print_locked_exits
+    locked_exits = @current_room.exits.map do |direction, _room|
+      [direction, direction.to_s.capitalize] if @current_room.locked?(direction)
+    end
+
+    unless locked_exits.compact!.empty?
+      puts locked_exits.inspect
+      puts "You investigate the doors and realize these are locked: #{locked_exits.map(&:last).join(', ')}"
+
+      if @player.inventory.include? "key"
+        locked_exits.map(&:first).each { |dir| @current_room.unlock(dir) }
+        puts "You use your key 🔑 to unlock a door: #{locked_exits.map(&:last).join(', ')}"
+        # TODO: remove key from inventory? OR: create specific keys for every door?
+      end
+    end
   end
 
   def input
@@ -103,12 +121,6 @@ class Game
       :failure => "You triggered a trap and are 🔥  burned alive 🔥."
     )
 
-    @unlock_door = Action.new(@player,
-      :type => "unlock", :thing => "door", :item => "key",
-      :confirmation => "You unlock the door with the key 🔑.",
-      :failure => "You have not the right key 🔑, the door is still locked."
-    )
-
     @push_button = Action.new(@player,
       :type => "push", :thing => "button", :item => "sword",
       :confirmation => "You push the button and some stones slide aside to reveal a small opening. █",
@@ -151,7 +163,6 @@ class Game
     @toilet.add_action(@interact_with_frog)
     @chest_room.add_action(@open_chest)
     @key_room.add_action(@take_key)
-    @staircase.add_action(@unlock_door) # don't forget to lock one door
   end
 
   def create_connections
