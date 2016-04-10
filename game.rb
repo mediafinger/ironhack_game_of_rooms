@@ -17,13 +17,19 @@ class Game
   def initialize
     @player = Player.new
     @food = 2  # for the Hunger module
-    @current_room = Map.new(@player).setup
+    @map = Map.new(@player)
+    @current_room = @map.setup
   end
 
   def start
     puts "Let the game begin..."
     puts "~" * 64
     room_description
+  end
+
+  # the player, the food, the rooms and actions
+  def serialize
+    { food: @food }.merge(@player.serialize).merge(@map.serialize)
   end
 
   def game_over

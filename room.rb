@@ -1,12 +1,30 @@
+require 'digest/bubblebabble'
 require 'set'
 
 class Room
-  attr_reader :description
+  attr_reader :description, :identifier
 
-  def initialize(description)
+  def initialize(description, identifier = nil)
     @description = description
     @exits = {}
     @locked_doors = Set.new()
+    @identifier = identifier || Digest::SHA256.bubblebabble(@description)[0..16].to_sym
+  end
+
+  # room, connection to other rooms and action
+  def serialize
+    serialized_exits = {}
+    @exits.each do |direction, room|
+      serialized_exits[direction] = room.identifier
+    end
+
+    {
+      identifier: @identifier,
+      description: @description,
+      exits: serialized_exits,
+      locked_doors: @locked_doors,
+      action: @action ? @action.serialize : nil,
+    }
   end
 
   def add_exit(direction, room)

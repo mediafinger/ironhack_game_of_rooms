@@ -12,6 +12,18 @@ class Action
     @remove = options[:remove]
   end
 
+  # just the action
+  def serialize
+    {
+      confirmation: @confirmation,
+      failure: @failure,
+      item: @item,
+      remove: @remove,
+      thing: @thing,
+      type: @type,
+    }
+  end
+
   def trigger
     puts "You see a #{@thing}. Do you want to #{@type} it? (Yes / No)"
     print "> "

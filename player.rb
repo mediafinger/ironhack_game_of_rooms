@@ -8,6 +8,14 @@ class Player
     @killpoints = 0
   end
 
+  # the player
+  def serialize
+    {
+      inventory: @inventory,
+      killpoints: @killpoints
+    }
+  end
+
   def add_to_inventory(item)
     if @inventory.include? item
       puts "You already have a #{item} and you don't need a second."

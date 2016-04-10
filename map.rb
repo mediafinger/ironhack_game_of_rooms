@@ -3,25 +3,37 @@ class Map
     @player = player  # needed to pass into the actions
   end
 
+  # all rooms including the actions and the connection to other rooms
+  def serialize
+    rooms = {}
+    @rooms.each do |key, room|
+      rooms[key] = room.serialize
+    end
+
+    { rooms: rooms }
+  end
+
   def setup
     create_rooms
     create_actions
     create_connections
 
-    @dark_room  # return the first room, in which the player starts
+    @rooms[:dark_room]  # return the first room, in which the player starts
   end
 
   private
 
   def create_rooms
-    @dark_room = Room.new("You are in a dark room. You can barely see anything.")
-    @spider_room = Room.new("You are in a dark room. You can barely see anything. Something is hanging from the ceiling. It feels like silk... but sticky.")
-    @key_room = Room.new("You enter a dimly lit room full of stuff. You are sure you can find something useful.")
-    @bear_room = Room.new("You open a cage. It smells. Something is lying in the corner.")
-    @skeleton_room = Room.new("You open a cage. Some bones are hanging in chains from the ceiling.")
-    @toilet = Room.new("Your nose is convinced you found the bathroom. Not the cleanest though.")
-    @chest_room = Room.new("After passing through a long hallway you enter a small chamber with massive stone walls.")
-    @staircase = Room.new("You found a staircase. There are narrow stairs in various directions.")
+    @rooms = {
+      dark_room: Room.new("You are in a dark room. You can barely see anything."),
+      spider_room: Room.new("You are in a dark room. You can barely see anything. Something is hanging from the ceiling. It feels like silk... but sticky."),
+      key_room: Room.new("You enter a dimly lit room full of stuff. You are sure you can find something useful."),
+      bear_room: Room.new("You open a cage. It smells. Something is lying in the corner."),
+      skeleton_room: Room.new("You open a cage. Some bones are hanging in chains from the ceiling."),
+      toilet: Room.new("Your nose is convinced you found the bathroom. Not the cleanest though."),
+      chest_room: Room.new("After passing through a long hallway you enter a small chamber with massive stone walls."),
+      staircase: Room.new("You found a staircase. There are narrow stairs in various directions."),
+    }
   end
 
   def create_actions
@@ -66,36 +78,36 @@ class Map
       :failure => "You kiss the frog.	🐸  He is disgusted and jumps into the water."
     )
 
-    @dark_room.add_action(@push_button)
-    @bear_room.add_action(@kill_bear)
-    @skeleton_room.add_action(@kill_skeleton)
-    @spider_room.add_action(@kill_spider)
-    @toilet.add_action(@interact_with_frog)
-    @chest_room.add_action(@open_chest)
-    @key_room.add_action(@take_key)
+    @rooms[:dark_room].add_action(@push_button)
+    @rooms[:bear_room].add_action(@kill_bear)
+    @rooms[:skeleton_room].add_action(@kill_skeleton)
+    @rooms[:spider_room].add_action(@kill_spider)
+    @rooms[:toilet].add_action(@interact_with_frog)
+    @rooms[:chest_room].add_action(@open_chest)
+    @rooms[:key_room].add_action(@take_key)
   end
 
   def create_connections
-    @dark_room.add_exit(:east, @spider_room)
-    @spider_room.add_exit(:west, @dark_room)
+    @rooms[:dark_room].add_exit(:east, @rooms[:spider_room])
+    @rooms[:spider_room].add_exit(:west, @rooms[:dark_room])
 
-    @dark_room.add_exit(:north, @staircase)
-    @staircase.add_exit(:south, @dark_room)
+    @rooms[:dark_room].add_exit(:north, @rooms[:staircase])
+    @rooms[:staircase].add_exit(:south, @rooms[:dark_room])
 
-    @toilet.add_exit(:south, @staircase)
-    @staircase.add_exit(:north, @toilet)
+    @rooms[:toilet].add_exit(:south, @rooms[:staircase])
+    @rooms[:staircase].add_exit(:north, @rooms[:toilet])
 
-    @toilet.add_exit(:west, @bear_room)
-    @bear_room.add_exit(:east, @toilet)
+    @rooms[:toilet].add_exit(:west, @rooms[:bear_room])
+    @rooms[:bear_room].add_exit(:east, @rooms[:toilet])
 
-    @bear_room.add_exit(:south, @skeleton_room)
-    @skeleton_room.add_exit(:north, @bear_room)
+    @rooms[:bear_room].add_exit(:south, @rooms[:skeleton_room])
+    @rooms[:skeleton_room].add_exit(:north, @rooms[:bear_room])
 
-    @key_room.add_exit(:west, @staircase)
-    @staircase.add_exit(:east, @key_room)
+    @rooms[:key_room].add_exit(:west, @rooms[:staircase])
+    @rooms[:staircase].add_exit(:east, @rooms[:key_room])
 
-    @chest_room.add_exit(:east, @staircase)
-    @staircase.add_exit(:west, @chest_room)
-    @staircase.lock(:west)
+    @rooms[:chest_room].add_exit(:east, @rooms[:staircase])
+    @rooms[:staircase].add_exit(:west, @rooms[:chest_room])
+    @rooms[:staircase].lock(:west)
   end
 end
