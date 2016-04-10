@@ -41,7 +41,7 @@ class Room
     @action = action
   end
 
-  def action
-    @action
+  def trigger_action
+    @action.trigger if @action
   end
 end

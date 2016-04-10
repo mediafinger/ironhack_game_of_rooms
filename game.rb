@@ -66,22 +66,25 @@ class Game
 
   def input
     command = gets.chomp.upcase
-    action = DIRECTIONS[command[0]] || command
 
-    case action
-    # when a, b, c behaves like if a || b || c
-    when :north, :east, :south, :west
-      @current_room.exit_to(action) ? move(action) : error(action)
+    case command
+    when "H", "HELP"
+      puts "You scream for help, but you are alone.\nType 'INSPECT ROOM' to investigate a room\nor 'QUIT' if you want to leave."
+    when "N", "NORTH", "W", "WEST", "S", "SOUTH", "E", "EAST"
+      direction = DIRECTIONS[command[0]]
+      @current_room.exit_to(direction) ? move(direction) : error(direction)
     when "L", "LOOK FOR FOOD"
       look_for_food # defined in module Hunger
-    when "I", "INSPECT ROOM"
-      @current_room.action.trigger
-    when "Q"
+    when "I", "INSPECT", "INSPECT ROOM", "INVESTIGATE", "INVESTIGATE ROOM"
+      @current_room.trigger_action
+    when "INVENTORY", "MY STUFF"
+      puts "You carry: #{@player.inventory.to_a.join(', ')}"
+    when "Q", "QUIT"
       puts "☠  You achieved exactly #{@player.killpoints} killpoints! ☠"
       puts " * * * Goodbye! * * * "
       exit
     else
-      puts "I don't understand. If you want to leave press 'Q'"
+      puts "I don't understand."
     end
 
     prompt
