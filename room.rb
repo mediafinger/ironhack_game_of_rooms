@@ -5,8 +5,8 @@ class Room
 
   def initialize(description)
     @description = description
-    @locked_doors = Set.new()
     @exits = {}
+    @locked_doors = Set.new()
   end
 
   def add_exit(direction, room)
@@ -26,7 +26,7 @@ class Room
   end
 
   def lock(direction)
-    @locked_doors << direction
+    @locked_doors << direction if exits.include?(direction)
   end
 
   def unlock(direction)
