@@ -17,6 +17,11 @@ class Player
     end
   end
 
+  def remove_from_inventory(item)
+    puts "#{item.capitalize} removed from inventory."
+    @inventory.delete_if { |elem| elem == item  }
+  end
+
   def has?(item)
     @inventory.include?(item)
   end

@@ -55,9 +55,10 @@ class Game
     unless locked_exits.compact!.empty?
       puts "You investigate the doors and realize these are locked: #{locked_exits.map(&:last).join(', ')}"
 
-      if @player.inventory.include? "key"
+      if @player.has? "key"
         locked_exits.map(&:first).each { |dir| @current_room.unlock(dir) }
         puts "You use your key 🔑  to unlock a door: #{locked_exits.map(&:last).join(', ')}"
+        @player.remove_from_inventory("key")
         # TODO: remove key from inventory? OR: create specific keys for every door?
       end
     end
