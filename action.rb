@@ -44,7 +44,7 @@ class Action
       @player.add_to_inventory(@item)
     else
       puts @failure
-      exit
+      Game.game_over
     end
   end
 
@@ -60,7 +60,7 @@ class Action
       puts @confirmation
     else
       puts @failure
-      exit
+      Game.game_over
     end
   end
 
@@ -81,7 +81,7 @@ class Action
       @player.add_killpoints(points)
     else
       puts @failure
-      exit
+      Game.game_over
     end
   end
 

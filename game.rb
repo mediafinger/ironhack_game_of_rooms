@@ -25,6 +25,16 @@ class Game
     room_description
   end
 
+  def game_over
+    Game.game_over
+  end
+
+  def self.game_over
+    puts "~" * 64
+    puts " G A M E  ☠   O V E R "
+    exit
+  end
+
   private
 
   def room_description
@@ -83,7 +93,7 @@ class Game
     when "Q", "QUIT"
       puts "☠  You achieved exactly #{@player.killpoints} killpoints! ☠"
       puts " * * * Goodbye! * * * "
-      exit
+      game_over
     else
       puts "I don't understand."
     end

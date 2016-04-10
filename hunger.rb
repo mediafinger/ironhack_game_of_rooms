@@ -12,7 +12,7 @@ module Hunger
 
     if @food < 0
       puts "You starve to death."
-      exit  # this exits / terminates the program!
+      Game.game_over  # this exits / terminates the program!
     elsif @food > 2
       puts "You get fat."
     else
