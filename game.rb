@@ -17,24 +17,25 @@ class Game
   def initialize
     @player = Player.new
     @current_room = Map.new(@player).setup
+  end
 
-    start
+  def start
+    puts "Let the game begin..."
+    puts "~" * 64
+    room_description
   end
 
   private
 
-  def start
-    puts "Let the game begin..."
-    puts " -  " * 10
+  def room_description
+    puts @current_room.description
+    print_exits
+
     prompt
   end
 
   def prompt
-    puts @current_room.description
-    print_exits
-
     print "> "
-
     input
   end
 
@@ -93,6 +94,8 @@ class Game
   def move(direction)
     puts "You go #{direction}."
     @current_room = @current_room.exit_to(direction)
+    puts " -  " * 16
+    room_description
   end
 
   def error(direction)
