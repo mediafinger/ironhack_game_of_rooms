@@ -1,8 +1,8 @@
-require_relative "./hunger.rb"
-require_relative "./room.rb"
-require_relative "./player.rb"
 require_relative "./action.rb"
+require_relative "./hunger.rb"
 require_relative "./map.rb"
+require_relative "./player.rb"
+require_relative "./room.rb"
 
 class Game
   include Hunger
