@@ -54,7 +54,7 @@ class Game
       direction.to_s.capitalize
     end
 
-    puts "Exits: #{exits.join(', ')}"
+    puts "---> You can go: #{exits.join(', ')}"
     print_locked_exits
   end
 
@@ -91,6 +91,7 @@ class Game
     when "INVENTORY", "MY STUFF"
       puts "You carry: #{@player.inventory.to_a.join(', ')}"
     when "Q", "QUIT"
+      puts "~" * 64
       puts "☠  You achieved exactly #{@player.killpoints} killpoints! ☠"
       puts " * * * Goodbye! * * * "
       game_over

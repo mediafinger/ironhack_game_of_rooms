@@ -14,6 +14,7 @@ class Action
 
   def trigger
     puts "You see a #{@thing}. Do you want to #{@type} it? (Yes / No)"
+    print "> "
     choice = gets.chomp.upcase[0]
 
     action if choice == "Y"
@@ -92,6 +93,7 @@ class Action
     random = rand(0..5)
 
     puts "Do you want to be friendly? (Yes / No)"
+    print "> "
     choice = gets.chomp.upcase[0]
 
     if choice == "Y"

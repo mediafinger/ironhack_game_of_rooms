@@ -12,13 +12,13 @@ class Player
     if @inventory.include? item
       puts "You already have a #{item} and you don't need a second."
     else
-      puts "#{item.capitalize} added to inventory."
+      puts " + + + #{item.capitalize} added to inventory. + + + "
       @inventory << item
     end
   end
 
   def remove_from_inventory(item)
-    puts "#{item.capitalize} removed from inventory."
+    puts " - - - #{item.capitalize} removed from inventory. - - - "
     @inventory.delete_if { |elem| elem == item  }
   end
 
