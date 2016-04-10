@@ -9,6 +9,7 @@ class Action
     @failure = options[:failure]
 
     @item = options[:item]
+    @remove = options[:remove]
   end
 
   def trigger
@@ -75,6 +76,7 @@ class Action
   def kill_enemy
     if @player.has?(@item)
       puts @confirmation
+      @player.remove_from_inventory(@remove) if @remove
       points = @thing.chars.reduce(0) { |sum, c| sum + c.getbyte(0) }
       @player.add_killpoints(points)
     else

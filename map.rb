@@ -55,7 +55,7 @@ class Map
     )
 
     @kill_spider = Action.new(@player,
-      :type => "kill", :thing => "deadly spider", :item => "frog",
+      :type => "kill", :thing => "deadly spider", :item => "frog", :remove => "frog",
       :confirmation => "You throw your 🐸  towards the spider. They battle. The frog wins and eats the deadly spider.",
       :failure => "You realize your weapons are useless against the spider. You get bitten. The paralysing poison has an instant effect. Your last thoughts before the spider starts digesting you is of green animals with fast and long tongues..."
     )
